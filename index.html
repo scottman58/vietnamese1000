@@ -64,9 +64,10 @@ main { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; -webkit-ove
 .orig { font-family: var(--jp); font-size: 1.2em; line-height: 1.8; margin: 0; }
 .mod { font-family: var(--jp); color: var(--mod-fg); padding: 6px 10px; line-height: 1.8; margin: 0; }
 .lbl { font-family: var(--zh); font-size: .68em; font-weight: 500; background: var(--mod-fg); color: var(--mod-bg); border-radius: 3px; padding: 1px 6px; margin-right: 8px; letter-spacing: .05em; }
-.chunks { display: flex; flex-wrap: wrap; gap: 10px 6px; padding-block: 12px; border-block: 1px dashed var(--line); }
+.chunks { display: flex; flex-wrap: wrap; gap: 12px 5px; padding-block: 12px; border-block: 1px dashed var(--line); }
 .ck { display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .ck .j { font-family: var(--jp); background: var(--chunk); border: 1px solid var(--chunk-line); border-radius: 5px; padding: 2px 6px; line-height: 1.7; }
+.ck .h { font-size: .74em; color: var(--shu); line-height: 1.3; max-width: 8em; text-align: center; }
 .ck svg { width: 9px; height: 12px; color: var(--muted); }
 .ck .z { font-size: .72em; color: var(--muted); line-height: 1.3; max-width: 7em; text-align: center; }
 .vocab { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: .86em; line-height: 1.6; }
@@ -208,8 +209,8 @@ function stat() {
 function fullHtml(v) {
   return `
     <div class="origrow"><button class="play" data-say="o" aria-pressed="false">${PLAY}</button><p class="orig">${ruby(v.c.map(x => x[0]).join(' '))}</p></div>
-    ${v.m ? `<div class="modbox"><button class="play" data-say="m" aria-pressed="false">${PLAY}</button><p class="mod"><span class="lbl">現代口語（南部）</span>${ruby(v.m)}</p>${v.mc ? `<div class="chunks mchunks">${v.mc.map(([j, z]) => `<div class="ck"><span class="j">${ruby(j)}</span>${ARROW}<span class="z">${esc(z)}</span></div>`).join('')}</div>` : ''}</div>` : ''}
-    <div class="chunks">${v.c.map(([j, z]) => `<div class="ck"><span class="j">${ruby(j)}</span>${ARROW}<span class="z">${esc(z)}</span></div>`).join('')}</div>
+    ${v.m ? `<div class="modbox"><button class="play" data-say="m" aria-pressed="false">${PLAY}</button><p class="mod"><span class="lbl">現代口語（南部）</span>${ruby(v.m)}</p>${v.mc ? `<div class="chunks mchunks">${v.mc.map(([j, z, h]) => `<div class="ck"><span class="j">${esc(j)}</span>${h ? `<span class="h">${esc(h)}</span>` : ''}${ARROW}<span class="z">${esc(z)}</span></div>`).join('')}</div>` : ''}</div>` : ''}
+    <div class="chunks">${v.c.map(([j, z, h]) => `<div class="ck"><span class="j">${esc(j)}</span>${h ? `<span class="h">${esc(h)}</span>` : ''}${ARROW}<span class="z">${esc(z)}</span></div>`).join('')}</div>
     <ul class="vocab">${(v.v || []).map(([w, d]) => `<li><span class="w">${esc(w)}</span>…${esc(d)}</li>`).join('')}</ul>
     ${v.n ? `<div class="note"><span class="tag">用法</span><span>${esc(v.n.replace(/^用法：/, ''))}</span></div>` : ''}
     ${v.p ? `<div class="note"><span class="tag">南部音</span><span>${esc(v.p.replace(/^南部發音提示：/, ''))}</span></div>` : ''}`;
@@ -223,6 +224,7 @@ function introHtml() {
       <li>每天學 ${S.daily} 句新句（設定裡可改）。</li>
       <li>先看中文，自己試著說出越南語，再按「顯示答案」對照。</li>
       <li>按「朗讀」跟著唸，大聲跟讀2〜3次。</li>
+      <li>逐字拆解：每個越南語詞下方的<span style="color:var(--shu)">紅字是漢越詞的漢字</span>，箭頭下是中文意思；原文和現代口語都有逐字對照。</li>
       <li>按照自己記得的程度選「再來」「模糊」「記得」，系統會在 1、3、7、16、35、90 天後排複習。</li>
       <li>每天先清完「複習」，再學新句。</li>
     </ol>
